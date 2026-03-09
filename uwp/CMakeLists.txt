@@ -100,6 +100,18 @@ set(BinLibs
 	debug ${VCPKG_ROOT}/debug/lib/ryml.lib
 	debug ${VCPKG_ROOT}/debug/lib/spdlogd.lib
 
+	optimized ${VCPKG_ROOT}/lib/c4core.lib
+	optimized ${VCPKG_ROOT}/lib/D3D12MA.lib
+	optimized ${VCPKG_ROOT}/lib/DirectX-Guids.lib
+	optimized ${VCPKG_ROOT}/lib/DirectX-Headers.lib
+	optimized ${VCPKG_ROOT}/lib/DirectXTex.lib
+	optimized ${VCPKG_ROOT}/lib/DirectXTK12.lib
+	optimized ${VCPKG_ROOT}/lib/fmt.lib
+	optimized ${VCPKG_ROOT}/lib/lodepng.lib
+	optimized ${VCPKG_ROOT}/lib/lodepng-c.lib
+	optimized ${VCPKG_ROOT}/lib/ryml.lib
+	optimized ${VCPKG_ROOT}/lib/spdlog.lib
+
 	${VCPKG_ROOT_ALT}/lib/dxcompiler.lib
 
 	dxgi.lib
