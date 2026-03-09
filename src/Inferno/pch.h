@@ -29,3 +29,6 @@
 #include "Convert.h"
 
 #pragma warning(pop)
+
+// [UWP]: PIX isn't available
+#define DISABLE_PIX

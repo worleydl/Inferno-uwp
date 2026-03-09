@@ -510,7 +510,9 @@ namespace Inferno::Render {
 
     void DrawDecals(GraphicsContext& ctx, float dt) {
         auto cmdList = ctx.GetCommandList();
+#ifndef DISABLE_PIX
         PIXScopedEvent(cmdList, PIX_COLOR_INDEX(0), "Decals");
+#endif
 
         {
             auto& effect = Effects->SpriteMultiply;

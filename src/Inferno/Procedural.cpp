@@ -195,7 +195,9 @@ namespace Inferno {
             if (!IsEnabled()) return;
             _copyCommands->Reset();
             {
+#ifndef DISABLE_PIX
                 PIXScopedEvent(_copyCommands->GetCommandList(), PIX_COLOR_INDEX(0), "Copy procedurals");
+#endif
 
                 std::scoped_lock lock(_mutex);
                 for (int i = 0; i < Procedurals.size(); ++i) {
@@ -217,7 +219,9 @@ namespace Inferno {
             auto currentTime = Clock.GetTotalTimeSeconds();
 
             {
+#ifndef DISABLE_PIX
                 PIXScopedEvent(_uploadCommands->GetCommandList(), PIX_COLOR_INDEX(1), "Update procedurals");
+#endif
                 for (auto& proc : Procedurals) {
                     if (proc->Update(_uploadCommands->GetCommandList(), currentTime)) {
                         didWork = true;

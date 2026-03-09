@@ -255,7 +255,9 @@ namespace Inferno::PostFx {
     }
 
     void UnpackPostBuffer::Execute(ID3D12GraphicsCommandList* commandList, PixelBuffer& source, PixelBuffer& dest) const {
+#ifndef DISABLE_PIX
         PIXScopedEvent(commandList, PIX_COLOR_DEFAULT, "Unpack buffer");
+#endif
 
         commandList->SetPipelineState(_pso.Get());
         commandList->SetComputeRootSignature(_rootSignature.Get());
@@ -310,7 +312,9 @@ namespace Inferno::PostFx {
 
     void ToneMapping::Apply(ID3D12GraphicsCommandList* commandList, PixelBuffer& source) {
         if (Settings::Graphics.EnableBloom) {
+#ifndef DISABLE_PIX
             PIXScopedEvent(commandList, PIX_COLOR_DEFAULT, "Bloom");
+#endif
             BloomExtractDownsample.Execute(commandList, source, Buffers.DownsampleBlur, Buffers.DownsampleLuma);
             DownsampleBloom.Execute(commandList, Buffers.DownsampleBlur, Buffers.Downsample);
             Blur.Execute(commandList, Buffers.Downsample[3], Buffers.Blur);
@@ -321,7 +325,9 @@ namespace Inferno::PostFx {
         }
 
         {
+#ifndef DISABLE_PIX
             PIXScopedEvent(commandList, PIX_COLOR_DEFAULT, "Tone map");
+#endif
 
             if (Render::Adapter->TypedUAVLoadSupport_R11G11B10_FLOAT()) {
                 ToneMap.Execute(commandList, TonyMcMapFace, Buffers.Upsample[0], source, Buffers.OutputLuma, nullptr, Dirt);

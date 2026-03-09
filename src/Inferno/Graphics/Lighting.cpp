@@ -34,7 +34,9 @@ namespace Inferno::Graphics {
 
     void FillLightGridCS::Dispatch(const GraphicsContext& ctx, ColorBuffer& linearDepth) {
         auto cmdList = ctx.GetCommandList();
+#ifndef DISABLE_PIX
         PIXScopedEvent(cmdList, PIX_COLOR_DEFAULT, "Fill Light Grid");
+#endif
 
         //ColorBuffer& LinearDepth = g_LinearDepth[TemporalEffects::GetFrameIndexMod2()];
 

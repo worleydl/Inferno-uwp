@@ -158,13 +158,17 @@ namespace Inferno::Render {
 
     void DepthPrepass(GraphicsContext& ctx) {
         auto cmdList = ctx.GetCommandList();
+#ifndef DISABLE_PIX
         PIXScopedEvent(cmdList, PIX_COLOR_DEFAULT, "Depth prepass");
+#endif
 
         // Depth prepass
         BeginDepthPrepass(ctx);
 
         if (!Game::Terrain.EscapePath.empty() && Settings::Editor.ShowTerrain) {
+#ifndef DISABLE_PIX
             PIXScopedEvent(cmdList, PIX_COLOR_INDEX(6), "Terrain Depth Prepass");
+#endif
             StaticModelDepthPrepass(ctx, Game::Terrain.ExitModel, Game::Terrain.ExitTransform);
             //auto dsv = Adapter->GetDepthBuffer().GetDSV();
             //cmdList->OMSetRenderTargets(0, nullptr, false, &dsv);
@@ -614,7 +618,9 @@ namespace Inferno::Render {
         Stats::FogPasses++;
 
         {
+#ifndef DISABLE_PIX
             PIXScopedEvent(cmdList, PIX_COLOR_INDEX(3), "Fog prepass");
+#endif
 
             auto& depthTexture = Adapter->GetFogDepthBuffer();
             Color clearColor(1, 1, 1); // clear to 1, otherwise the fog volumes have an outline at a distance
@@ -634,7 +640,9 @@ namespace Inferno::Render {
         }
 
         {
+#ifndef DISABLE_PIX
             PIXScopedEvent(cmdList, PIX_COLOR_INDEX(3), "Fog");
+#endif
             auto& depthTexture = Adapter->FogDepthBuffer;
             depthTexture.Transition(cmdList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
             ctx.SetRenderTarget(renderTarget.GetRTV(), Adapter->GetDepthBuffer().GetDSV());
@@ -697,7 +705,9 @@ namespace Inferno::Render {
         Graphics::Lights.Dispatch(ctx);
 
         {
+#ifndef DISABLE_PIX
             PIXScopedEvent(cmdList, PIX_COLOR_INDEX(5), "Level");
+#endif
             LegitProfiler::ProfilerTask queue("Execute queues", LegitProfiler::Colors::AMETHYST);
 
             auto& depthBuffer = Adapter->GetDepthBuffer();
@@ -709,7 +719,9 @@ namespace Inferno::Render {
 
             // todo: OR game show terrain
             if (Settings::Editor.ShowTerrain) {
+#ifndef DISABLE_PIX
                 PIXScopedEvent(cmdList, PIX_COLOR_INDEX(6), "Terrain");
+#endif
                 //cmdList->OMSetStencilRef(0);
                 DrawStars(ctx);
                 DrawTerrain(ctx);
@@ -739,25 +751,33 @@ namespace Inferno::Render {
             //}
 
             {
+#ifndef DISABLE_PIX
                 PIXScopedEvent(cmdList, PIX_COLOR_INDEX(1), "Opaque queue");
+#endif
                 for (auto& cmd : _renderQueue.Opaque())
                     ExecuteRenderCommand(ctx, cmd, RenderPass::Opaque);
             }
 
             {
+#ifndef DISABLE_PIX
                 PIXScopedEvent(cmdList, PIX_COLOR_INDEX(1), "Decal queue");
+#endif
                 for (auto& cmd : _renderQueue.Opaque())
                     ExecuteRenderCommand(ctx, cmd, RenderPass::Decals, true);
             }
 
             {
+#ifndef DISABLE_PIX
                 PIXScopedEvent(cmdList, PIX_COLOR_INDEX(2), "Wall queue");
+#endif
                 for (auto& cmd : _renderQueue.Transparent())
                     ExecuteRenderCommand(ctx, cmd, RenderPass::Walls);
             }
 
             {
+#ifndef DISABLE_PIX
                 PIXScopedEvent(cmdList, PIX_COLOR_INDEX(2), "Wall decal queue");
+#endif
                 for (auto& cmd : _renderQueue.Transparent())
                     ExecuteRenderCommand(ctx, cmd, RenderPass::Walls, true);
             }
@@ -776,7 +796,9 @@ namespace Inferno::Render {
             renderTarget.Transition(cmdList, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
             {
+#ifndef DISABLE_PIX
                 PIXScopedEvent(cmdList, PIX_COLOR_INDEX(2), "Transparent queue");
+#endif
                 for (auto& cmd : _renderQueue.Transparent())
                     ExecuteRenderCommand(ctx, cmd, RenderPass::Transparent);
             }

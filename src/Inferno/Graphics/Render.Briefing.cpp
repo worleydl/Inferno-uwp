@@ -109,7 +109,9 @@ namespace Inferno::Render {
     }
 
     void DrawBriefing(GraphicsContext& ctx, RenderTarget& target, const BriefingState& briefing) {
+#ifndef DISABLE_PIX
         PIXScopedEvent(ctx.GetCommandList(), PIX_COLOR_INDEX(10), "Briefing");
+#endif
         ctx.ClearColor(target);
 
         // Update the light grid in briefing mode, as the level won't do it for us

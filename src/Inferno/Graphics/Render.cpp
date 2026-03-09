@@ -407,7 +407,9 @@ namespace Inferno::Render {
     }
 
     void PostProcess(const GraphicsContext& ctx, PixelBuffer& source) {
+#ifndef DISABLE_PIX
         PIXScopedEvent(ctx.GetCommandList(), PIX_COLOR_INDEX(8), "Post");
+#endif
         auto cmdList = ctx.GetCommandList();
         ToneMapping->ToneMap.Exposure = Game::Exposure;
         ToneMapping->ToneMap.BloomStrength = Game::BloomStrength;
@@ -423,7 +425,9 @@ namespace Inferno::Render {
     }
 
     void DrawImguiBatch(GraphicsContext& ctx) {
+#ifndef DISABLE_PIX
         PIXScopedEvent(ctx.GetCommandList(), PIX_COLOR_INDEX(9), "UI");
+#endif
         ScopedTimer imguiTimer(&Metrics::ImGui);
         Canvas->Render(ctx);
         // Imgui batch modifies render state greatly. Normal geometry will likely not render correctly afterwards.
@@ -709,7 +713,9 @@ namespace Inferno::Render {
         EndUpdateEffects();
 
         if (!Settings::Editor.HideUI && Game::GetState() == GameState::Editor) {
+#ifndef DISABLE_PIX
             PIXScopedEvent(cmdList, PIX_COLOR_INDEX(6), "Editor");
+#endif
             //DrawEditor(ctx, Game::Level);
             DrawLevelDebug(Game::Level, ctx.Camera);
             DrawEditor(ctx, Game::Level);
