@@ -259,6 +259,9 @@ static void ImGui_ImplWin32_UpdateKeyModifiers() {
 // This code supports multi-viewports (multiple OS Windows mapped into different Dear ImGui viewports)
 // Because of that, it is a little more complicated than your typical single-viewport binding code!
 static void ImGui_ImplWin32_UpdateMouseData() {
+#if 1
+    return; // Mouse doesn't work on UWP, also missing hwnd might need to force set that to the corewin ref
+#endif
     ImGui_ImplWin32_Data* bd = ImGui_ImplWin32_GetBackendData();
     ImGuiIO& io = ImGui::GetIO();
     IM_ASSERT(bd->hWnd != 0);

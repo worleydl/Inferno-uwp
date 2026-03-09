@@ -232,7 +232,7 @@ namespace Inferno {
         bool HudGlare = true; // Enables D3 style glare on the HUD
         bool HudDirt = true; // Enables dirt on the HUD
         bool EnableJoystick = false;
-        bool EnableGamepad = false;
+        bool EnableGamepad = true;
         bool EnableMouse = true;
         bool UseMouselook = false; // Direct mouse control of the player ship. Ignores physics.
         bool PreferHighResFonts = true;

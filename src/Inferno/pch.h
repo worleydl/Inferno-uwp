@@ -32,3 +32,4 @@
 
 // [UWP]: PIX isn't available
 #define DISABLE_PIX
+#define _UWP

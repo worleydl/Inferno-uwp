@@ -271,7 +271,9 @@ namespace Inferno::Input {
 
             device->name = name;
             device->guid = guid;
+#ifndef _UWP
             device->path = path;
+#endif
             device->id = id;
             device->type = SDL_GetGamepadType(gamepad);
 
@@ -314,7 +316,9 @@ namespace Inferno::Input {
             auto device = &_devices.emplace_back(); // create a new device
 
             device->guid = guid;
+#ifndef _UWP
             device->path = path;
+#endif
             device->name = name;
             device->id = id;
             device->numAxes = numAxes;
@@ -700,6 +704,7 @@ namespace Inferno::Input {
     void Initialize(HWND hwnd) {
         Hwnd = hwnd;
 
+#ifndef _UWP
         // Register the mouse for raw input
         InitRawMouseInput(hwnd);
         RAWINPUTDEVICE rid{};
@@ -709,6 +714,7 @@ namespace Inferno::Input {
         rid.hwndTarget = hwnd;
         if (!RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE)))
             throw std::system_error(std::error_code(static_cast<int>(GetLastError()), std::system_category()), "RegisterRawInputDevices");
+#endif
 
         if (Inferno::Settings::Inferno.EnableGamepad)
             SDL_SetGamepadEventsEnabled(true);

@@ -19,6 +19,11 @@ using namespace Inferno;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+#ifdef _UWP
+extern "C" __declspec(dllimport) void uwp_ProcessEvents();
+extern "C" __declspec(dllimport) void uwp_GetScreenSize(int*, int*);
+#endif
+
 namespace {
     bool AppSuspended = false;
     bool AppMinimized = false;
@@ -255,6 +260,7 @@ Inferno::Shell::~Shell() {
 }
 
 int Inferno::Shell::Show(uint2 position, uint2 size, int nCmdShow) const {
+#ifndef _UWP
     if (!RegisterWindowClass(_hInstance))
         throw std::exception("Failed to register window class");
 
@@ -286,10 +292,17 @@ int Inferno::Shell::Show(uint2 position, uint2 size, int nCmdShow) const {
     RECT rc;
     GetClientRect(hwnd, &rc);
     app.Initialize(rc.right - rc.left, rc.bottom - rc.top);
+#else
+    int uwp_x, uwp_y;
+    uwp_GetScreenSize(&uwp_x, &uwp_y);
+    Application app;
+    app.Initialize(uwp_x, uwp_y);
+#endif
 
     // Main message loop
     MSG msg{};
     while (msg.message != WM_QUIT) {
+#ifndef _UWP
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -297,10 +310,16 @@ int Inferno::Shell::Show(uint2 position, uint2 size, int nCmdShow) const {
         else {
             app.Tick();
         }
+#else
+        uwp_ProcessEvents();
+        app.Tick();
+#endif
     }
 
+#ifndef _UWP
     DestroyWindow(hwnd);
     DeleteObject(BackgroundBrush);
+#endif
     return (int)msg.wParam;
 }
 

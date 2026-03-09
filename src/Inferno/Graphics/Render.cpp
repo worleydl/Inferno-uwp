@@ -255,7 +255,9 @@ namespace Inferno::Render {
     }
 
     void Initialize(HWND hwnd, uint width, uint height) {
+#ifndef _UWP
         assert(hwnd);
+#endif
         _hwnd = hwnd;
         Adapter = make_unique<DeviceResources>(BackBufferFormat);
         StaticTextures = make_unique<StaticTextureDef>();

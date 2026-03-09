@@ -10,6 +10,10 @@
 #include <dxgi1_6.h>
 #include "MaterialLibrary.h"
 
+#ifdef _UWP
+extern "C" __declspec(dllimport) void* uwp_GetWindowReference();
+#endif
+
 namespace Inferno {
     using namespace DirectX;
 
@@ -263,8 +267,10 @@ namespace Inferno {
     // forceSwapChainRebuild is needed when changing the vsync option, as the
     // relevant swap chain flag cannot be changed with ResizeBuffers.
     void DeviceResources::CreateWindowSizeDependentResources(bool forceSwapChainRebuild) {
+#ifndef _UWP
         if (!m_window)
             throw std::exception("Call SetWindow with a valid Win32 window handle");
+#endif
 
         WaitForGpu(); // Wait until all previous GPU work is complete.
 
@@ -332,6 +338,7 @@ namespace Inferno {
 
             // Create a swap chain for the window.
             ComPtr<IDXGISwapChain1> swapChain;
+#ifndef _UWP
             ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(
                 CommandQueue->Get(),
                 m_window,
@@ -340,11 +347,22 @@ namespace Inferno {
                 nullptr,
                 swapChain.GetAddressOf()
             ));
+#else
+            ThrowIfFailed(m_dxgiFactory->CreateSwapChainForCoreWindow(
+                CommandQueue->Get(),
+                static_cast<IUnknown*>(uwp_GetWindowReference()),
+                &swapChainDesc,
+                nullptr,
+                swapChain.GetAddressOf()
+            ));
+#endif
 
             ThrowIfFailed(swapChain.As(&m_swapChain));
 
+#ifndef _UWP
             // This class does not support exclusive full-screen mode and prevents DXGI from responding to the ALT+ENTER shortcut
             ThrowIfFailed(m_dxgiFactory->MakeWindowAssociation(m_window, DXGI_MWA_NO_ALT_ENTER));
+#endif
         }
 
         // Handle color space settings for HDR
