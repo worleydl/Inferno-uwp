@@ -22,6 +22,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #ifdef _UWP
 extern "C" __declspec(dllimport) void uwp_ProcessEvents();
 extern "C" __declspec(dllimport) void uwp_GetScreenSize(int*, int*);
+
+static bool m_running = true;
 #endif
 
 namespace {
@@ -299,10 +301,10 @@ int Inferno::Shell::Show(uint2 position, uint2 size, int nCmdShow) const {
     app.Initialize(uwp_x, uwp_y);
 #endif
 
-    // Main message loop
     MSG msg{};
-    while (msg.message != WM_QUIT) {
 #ifndef _UWP
+    // Main message loop
+    while (msg.message != WM_QUIT) {
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -311,6 +313,7 @@ int Inferno::Shell::Show(uint2 position, uint2 size, int nCmdShow) const {
             app.Tick();
         }
 #else
+    while (m_running) {
         uwp_ProcessEvents();
         app.Tick();
 #endif
@@ -364,7 +367,11 @@ void Inferno::Shell::UpdateWindowTitle(string_view message) {
 }
 
 void Inferno::Shell::Quit() {
+#ifndef _UWP
     PostMessage(Shell::Hwnd, WM_CLOSE, 0, 0);
+#else
+    m_running = false;
+#endif
 }
 
 namespace Inferno {
