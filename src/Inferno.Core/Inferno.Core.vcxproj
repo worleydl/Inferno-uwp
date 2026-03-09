@@ -16,6 +16,7 @@
     <ProjectGuid>{3d2bbf26-57a1-4cc7-8297-44d6c5d5945f}</ProjectGuid>
     <RootNamespace>InfernoCore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <VcpkgTriplet>x64-windows-static-md</VcpkgTriplet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

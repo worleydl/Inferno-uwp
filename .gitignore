@@ -349,6 +349,7 @@ healthchecksdb
 
 /data
 /vcpkg_installed/x64-windows
+/vcpkg_installed/x64-windows-static-md
 inferno.cfg
 imgui.ini
 dxil.dll
@@ -376,3 +377,4 @@ dxc.exe
 *.HAM
 *.S22
 /src/Inferno/assets/*
+bin_assets/*
