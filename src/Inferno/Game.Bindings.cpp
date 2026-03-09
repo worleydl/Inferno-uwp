@@ -407,6 +407,7 @@ namespace Inferno {
         device.bindings = {};
         device.sensitivity.rotationDeadzone = Vector3{ deadzone, deadzone, deadzone };
 
+#ifndef _UWP
         device.Bind({ .action = GameAction::ForwardReverseAxis, .id = SDL_GAMEPAD_AXIS_LEFTY, .type = BindType::Axis });
         device.Bind({ .action = GameAction::LeftRightAxis, .id = SDL_GAMEPAD_AXIS_LEFTX, .type = BindType::Axis });
         device.Bind({ .action = GameAction::PitchAxis, .id = SDL_GAMEPAD_AXIS_RIGHTY, .type = BindType::Axis });
@@ -442,5 +443,39 @@ namespace Inferno {
 
         // Ran out of bindings for xbox, but rear view is rarely used anyway
         device.Bind({ .action = GameAction::RearView, .id = SDL_GAMEPAD_BUTTON_TOUCHPAD, .type = BindType::Button });
+#else
+        // UWP TODO: Seems like binds are persisted but not restored on load so the gamepad gets reset every time
+        // For now I've updated to the config I like playing with to finish testing other odds and ends before release
+        device.Bind({ .action = GameAction::Forward, .id = SDL_GAMEPAD_AXIS_RIGHT_TRIGGER, .type = BindType::AxisPlus });
+        device.Bind({ .action = GameAction::Reverse, .id = SDL_GAMEPAD_AXIS_LEFT_TRIGGER, .type = BindType::AxisPlus });
+
+        device.Bind({ .action = GameAction::UpDownAxis, .id = SDL_GAMEPAD_AXIS_RIGHTY, .type = BindType::Axis, .invert = true });
+        device.Bind({ .action = GameAction::LeftRightAxis, .id = SDL_GAMEPAD_AXIS_RIGHTX, .type = BindType::Axis });
+        device.Bind({ .action = GameAction::PitchAxis, .id = SDL_GAMEPAD_AXIS_LEFTY, .type = BindType::Axis, .invert = true });
+        device.Bind({ .action = GameAction::YawAxis, .id = SDL_GAMEPAD_AXIS_LEFTX, .type = BindType::Axis });
+
+        // Sprint is usually on left stick
+        device.Bind({ .action = GameAction::Afterburner, .id = SDL_GAMEPAD_BUTTON_LEFT_STICK, .type = BindType::Button });
+        device.Bind({ .action = GameAction::EnergyConverter, .id = SDL_GAMEPAD_BUTTON_RIGHT_STICK, .type = BindType::Button });
+
+        // Face buttons
+        device.Bind({ .action = GameAction::FireFlare, .id = SDL_GAMEPAD_BUTTON_NORTH, .type = BindType::Button });
+        device.Bind({ .action = GameAction::FireSecondary, .id = SDL_GAMEPAD_BUTTON_EAST, .type = BindType::Button });
+        device.Bind({ .action = GameAction::FirePrimary, .id = SDL_GAMEPAD_BUTTON_SOUTH, .type = BindType::Button });
+        device.Bind({ .action = GameAction::DropBomb, .id = SDL_GAMEPAD_BUTTON_WEST, .type = BindType::Button });
+
+        device.Bind({ .action = GameAction::Automap, .id = SDL_GAMEPAD_BUTTON_BACK, .type = BindType::Button });
+        device.Bind({ .action = GameAction::Pause, .id = SDL_GAMEPAD_BUTTON_START, .type = BindType::Button });
+
+        // Shoulders
+        device.Bind({ .action = GameAction::RollLeft, .id = SDL_GAMEPAD_BUTTON_LEFT_SHOULDER, .type = BindType::Button });
+        device.Bind({ .action = GameAction::RollRight, .id = SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER, .type = BindType::Button });
+
+        // Dpad bindings
+        device.Bind({ .action = GameAction::Headlight,      .id = SDL_GAMEPAD_BUTTON_DPAD_UP,    .type = BindType::Button });
+        device.Bind({ .action = GameAction::CycleBomb,      .id = SDL_GAMEPAD_BUTTON_DPAD_DOWN,  .type = BindType::Button });
+        device.Bind({ .action = GameAction::CycleSecondary, .id = SDL_GAMEPAD_BUTTON_DPAD_LEFT,  .type = BindType::Button });
+        device.Bind({ .action = GameAction::CyclePrimary,   .id = SDL_GAMEPAD_BUTTON_DPAD_RIGHT, .type = BindType::Button });
+#endif
     }
 }
