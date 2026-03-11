@@ -221,9 +221,11 @@ namespace Inferno::UI {
             panel->HorizontalAlignment = AlignH::Center;
             panel->VerticalAlignment = AlignV::Top;
 
+#ifndef _UWP
             panel->AddChild<Checkbox>("Enable Mouse", Settings::Inferno.EnableMouse);
             panel->AddChild<Checkbox>("Enable joystick", Settings::Inferno.EnableJoystick);
             panel->AddChild<Checkbox>("Enable gamepad", Settings::Inferno.EnableGamepad);
+#endif
             panel->AddChild<Checkbox>("Classic pitch speed", Settings::Inferno.HalvePitchSpeed);
             panel->AddChild<Checkbox>("Use mouselook [cheat]", Settings::Inferno.UseMouselook);
 
