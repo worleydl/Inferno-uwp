@@ -16,22 +16,19 @@ FetchContent_Declare(UwpLibs
 )
 FetchContent_MakeAvailable(UwpLibs)
 
-# todo: automatically apply based on msvc config
-set (BUILD_CONFIG "Release")
-
 # Define project
 project(inferno-uwp LANGUAGES CXX)
 set_directory_properties(PROPERTIES VS_STARTUP_PROJECT ${PROJECT_NAME})
 
 # Config for main recomp build
-set(INFERNO_ASSET_DIR CACHE PATH "")
+#set(INFERNO_ASSET_DIR CACHE PATH "")
 set(INFERNO_DIR CACHE PATH "")
-if(NOT INFERNO_ASSET_DIR)
-	message(FATAL_ERROR "INFERNO_ASSET_DIR must point to a folder containing required runtime assets.")
-endif()
+#if(NOT INFERNO_ASSET_DIR)
+#	message(FATAL_ERROR "INFERNO_ASSET_DIR must point to a folder containing required runtime assets.")
+#endif()
 
 if(NOT INFERNO_DIR)
-	message(FATAL_ERROR "INFERNO_DIR must point to the Inferno build folder")
+	message(FATAL_ERROR "INFERNO_DIR must point to the Inferno build folder (../bin)")
 endif()
 
 add_executable(${PROJECT_NAME} WIN32
@@ -122,9 +119,9 @@ set(BinLibs
 target_link_libraries(${PROJECT_NAME} PRIVATE ${BinLibs})
 
 # Data deployment (this still requires some manual fetching of appropriate files)
-uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/assets "assets")
-uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/d1 "d1")
-uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/d2 "d2")
-uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/mods "mods")
-uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/shaders "shaders")
+#uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/assets "assets")
+#uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/d1 "d1")
+#uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/d2 "d2")
+#uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/mods "mods")
+#uwp_pkg(${PROJECT_NAME} ${INFERNO_ASSET_DIR}/shaders "shaders")
 

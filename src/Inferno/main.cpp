@@ -257,6 +257,11 @@ int ShimMain() {
         CreateConsoleWindow();
         ConfigureLogging("inferno.log");
 
+#ifdef _UWP
+        // External load only for now
+        _chdir("E:\\inferno");
+#endif
+
         TCHAR directory[MAX_PATH];
         if (SUCCEEDED(GetCurrentDirectory(MAX_PATH, directory))) {
             filesystem::path path(directory);
