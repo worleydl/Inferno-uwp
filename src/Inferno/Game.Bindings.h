@@ -335,8 +335,11 @@ namespace Inferno {
             deviceBinding.path = path;
             deviceBinding.type = type;
 
+// dlw: Don't want this to always reset, there is another call to reset from application when needed
+#if 0
             if (type == Input::InputType::Gamepad)
                 ResetGamepadBindings(deviceBinding);
+#endif
 
             _devices.push_back(deviceBinding);
             return _devices.back();
