@@ -444,8 +444,7 @@ namespace Inferno {
         // Ran out of bindings for xbox, but rear view is rarely used anyway
         device.Bind({ .action = GameAction::RearView, .id = SDL_GAMEPAD_BUTTON_TOUCHPAD, .type = BindType::Button });
 #else
-        // UWP TODO: Seems like binds are persisted but not restored on load so the gamepad gets reset every time
-        // For now I've updated to the config I like playing with to finish testing other odds and ends before release
+        // dlw: I found these to be comfortable but everyone has their own favorite, binding restoration is fixed now
         device.Bind({ .action = GameAction::ForwardReverseAxis, .id = SDL_GAMEPAD_AXIS_LEFTY, .type = BindType::Axis });
         device.Bind({ .action = GameAction::LeftRightAxis, .id = SDL_GAMEPAD_AXIS_LEFTX, .type = BindType::Axis });
         device.Bind({ .action = GameAction::PitchAxis, .id = SDL_GAMEPAD_AXIS_RIGHTY, .type = BindType::Axis, .invert = true });
